@@ -10,18 +10,20 @@ namespace Kakera
         [SerializeField]
         private UnimgpickerCamera imageCamera;
 
-        [SerializeField]
-        private MeshRenderer imageRenderer;
+        //[SerializeField]
+        public GameObject myObject;
+
+        private PrimitiveType meshType = PrimitiveType.Cube;
 
         void Awake()
         {
             imagePicker.Completed += (string path) =>
             {
-                StartCoroutine(LoadImage(path, imageRenderer));
+                StartCoroutine(LoadImage(path, myObject.GetComponent<MeshRenderer>()));
             };
             imageCamera.Completed += (string path) =>
             {
-                StartCoroutine(LoadImage(path, imageRenderer));
+                StartCoroutine(LoadImage(path, myObject.GetComponent<MeshRenderer>()));
             };
         }
 
@@ -88,6 +90,59 @@ namespace Kakera
             }
 
             output.material.mainTexture = texture;
+        }
+
+        public void ToCube()
+        {
+            //if (meshType == PrimitiveType.Cube)
+            //{
+            //    return;
+            //}
+
+            //meshType = PrimitiveType.Cube;
+            //GameObject newObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            //newObject.transform.Translate(myObject.transform.position);
+            //newObject.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
+            //newObject.GetComponent<MeshRenderer>().material = myObject.GetComponent<MeshRenderer>().material;
+            //Rotator rotator = newObject.AddComponent<Rotator>();
+            //rotator.rotationVector = new Vector3(10, 30, 10);
+            //Destroy(myObject);
+            //myObject = newObject;
+            ChangePrimitive(PrimitiveType.Cube);
+        }
+
+        public void ToSphere()
+        {
+            ChangePrimitive(PrimitiveType.Sphere);
+        }
+
+        public void ToCylinder()
+        {
+            ChangePrimitive(PrimitiveType.Cylinder);
+        }
+
+        public void ToCapsule()
+        {
+            ChangePrimitive(PrimitiveType.Capsule);
+        }
+
+        protected void ChangePrimitive(PrimitiveType primType)
+        {
+            if (meshType == primType)
+            {
+                return;
+            }
+
+            meshType = primType;
+            GameObject newObject = GameObject.CreatePrimitive(meshType);
+            newObject.transform.Translate(myObject.transform.position);
+            newObject.transform.localRotation = myObject.transform.localRotation;
+            newObject.transform.localScale = new Vector3(3.6f, 3.6f, 3.6f);
+            newObject.GetComponent<MeshRenderer>().material = myObject.GetComponent<MeshRenderer>().material;
+            Rotator rotator = newObject.AddComponent<Rotator>();
+            rotator.rotationVector = new Vector3(10, 30, 10);
+            Destroy(myObject);
+            myObject = newObject;
         }
     }
 }

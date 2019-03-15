@@ -6,7 +6,7 @@ namespace Kakera
     public class Rotator : MonoBehaviour
     {
         [SerializeField]
-        private Vector3 rotationVector;
+        public Vector3 rotationVector;
 
         void Update()
         {
