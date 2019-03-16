@@ -26,6 +26,14 @@ namespace Kakera
                 StartCoroutine(LoadImage(path, myObject.GetComponent<MeshRenderer>()));
             };
         }
+        IEnumerator Start()
+        {
+            string url = "https://google.com";
+            WWW www = new WWW(url);
+            yield return www;
+            MeshRenderer renderer = myObject.GetComponent<MeshRenderer>();
+            renderer.material.mainTexture = www.texture;
+        }
 
         public void OnPressShowPicker()
         {
